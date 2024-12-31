@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  void aFunction() {
-    print('Button is pressed');
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  double balance = 0;
+  void addMoney() async {
+    setState(() {
+      balance = balance + 10;
+    });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('balance', balance);
+  }
+
+  void loadBalance() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      balance = prefs.getDouble('balance') ?? 0;
+    });
   }
 
   @override
@@ -33,7 +51,9 @@ class MyApp extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Bank Balance:'),
-                    Text('0'),
+                    Text('$balance'),
+                    OutlinedButton(
+                        onPressed: loadBalance, child: Text('load balance'))
                   ],
                 ),
               ),
@@ -41,10 +61,10 @@ class MyApp extends StatelessWidget {
                 flex: 1,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red[400],
+                    backgroundColor: Colors.red[700],
                     minimumSize: Size(double.infinity, 0),
                   ),
-                  onPressed: aFunction,
+                  onPressed: addMoney,
                   child: Text('Click here'),
                 ),
               )
