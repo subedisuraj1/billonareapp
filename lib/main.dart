@@ -1,5 +1,6 @@
-import 'package:billionareapp/add_money_button.dart';
-import 'package:billionareapp/balance_view.dart';
+
+import 'package:billonareapp/add_money_button.dart';
+import 'package:billonareapp/balance_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
