@@ -1,3 +1,5 @@
+import 'package:billionareapp/add_money_button.dart';
+import 'package:billionareapp/balance_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,12 +16,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   double balance = 0;
-  void addMoney() async {
+  void afunction() async {
     setState(() {
-      balance = balance + 10;
+      balance = balance + 400;
     });
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('balance', balance);
+  }
+
+  @override
+  void initState() {
+    loadBalance();
+    super.initState();
   }
 
   void loadBalance() async {
@@ -35,7 +44,8 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData.dark(useMaterial3: true),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Billonare App!'),
+          centerTitle: true,
+          title: const Text('Billonare App!'),
         ),
         body: Container(
           padding: EdgeInsets.all(20),
@@ -45,29 +55,12 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                flex: 9,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Bank Balance:'),
-                    Text('$balance'),
-                    OutlinedButton(
-                        onPressed: loadBalance, child: Text('load balance'))
-                  ],
-                ),
+              BalanceView(
+                balance: balance,
               ),
-              Expanded(
-                flex: 1,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red[700],
-                    minimumSize: Size(double.infinity, 0),
-                  ),
-                  onPressed: addMoney,
-                  child: Text('Click here'),
-                ),
-              )
+              AddMoneyButton(
+                addMoneyFunction: afunction,
+              ),
             ],
           ),
         ),
